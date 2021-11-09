@@ -12,6 +12,7 @@
     "nodemon": "^2.0.14"
   },
   "dependencies": {
+    "@google-cloud/bigquery": "^5.9.1",
     "chart.js": "^3.6.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1"
