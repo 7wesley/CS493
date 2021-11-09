@@ -1,11 +1,20 @@
 const express = require("express");
 const path = require("path");
+const bigQuery = require("./query");
 const app = express();
-const port = process.env.PORT || "5000";
+const port = process.env.PORT || "5000"
+;
+
+//Views
+app.set('views', './views');
+app.set('view engine', 'ejs');
 
 //GET
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
+  //Getting data from BigQuery before rendering page
+  let data = bigQuery.defaultQuery();
+  //Passing data to template
+  res.render('index', { data: data });
 });
 
 /** Listen for requests @ port */
