@@ -4,7 +4,7 @@ const bigquery = new BigQuery();
 
 module.exports = {
   //BigQuery data
-  query: async function() {
+  query: async function () {
     // Queries the U.S. given names dataset for the state of Texas.
 
     const query = `SELECT name
@@ -31,7 +31,7 @@ module.exports = {
     rows.forEach((row) => console.log(row));
   },
   //Default data to ensure everything is working
-  defaultQuery: function() {
+  defaultQuery: function () {
     return {
       labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [
