@@ -1,5 +1,15 @@
-# Covid
+## Run app
+```sh
+node app.js
+```
 
-Run server: npm run dev
+## Run app as dev
+```sh
+npm run dev
+```
 
-Runs on port 5000 by default, can be changed by adjusting your local PORT envrionment variable.
+## Build and run container
+```bash
+docker build -t cs493 .
+docker run --name cs493-container cs493
+```
