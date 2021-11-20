@@ -1,16 +1,17 @@
-## Setting up Google Cloud Platform Credentials
-#(For more information visit https://cloud.google.com/bigquery/docs/reference/libraries)
+# Setting up Google Cloud Platform Credentials
+## (For more information visit https://cloud.google.com/bigquery/docs/reference/libraries)
 
-#For Linux Systems
+## For Linux Systems
 ```sh
 export GOOGLE_APPLICATION_CREDENTIALS="<KEY_PATH>"
 ```
 
-#For Windows Systems
+## For Windows Systems
 ```sh
 set GOOGLE_APPLICATION_CREDENTIALS="<KEY_PATH>"
 ```
 ------------
+# Running the Application
 
 ## Run app
 ```sh
