@@ -9,10 +9,8 @@ app.set("view engine", "ejs");
 
 //GET
 app.get("/", (req, res) => {
-  //Getting data from BigQuery before rendering page
-  let data = bigQuery.defaultQuery();
-  //Passing data to template
-  res.render("index", { data: data });
+  let state_graph = bigQuery.cases_by_state("US_NC");
+  state_graph.then((graph_value) => res.render("index", graph_value));
 });
 
 /** Listen for requests @ port */
