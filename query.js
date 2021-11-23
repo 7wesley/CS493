@@ -4,17 +4,17 @@ const bigquery = new BigQuery();
 
 module.exports = {
   //BigQuery data
-  query: async function () {
+  query: async function (q) {
     // Queries the U.S. given names dataset for the state of Texas.
 
-    const query = `SELECT name
-      FROM \`bigquery-public-data.usa_names.usa_1910_2013\`
-      WHERE state = 'TX'
-      LIMIT 100`;
+    // const query = `SELECT name
+    //   FROM \`bigquery-public-data.usa_names.usa_1910_2013\`
+    //   WHERE state = 'TX'
+    //   LIMIT 100`;
 
     // For all options, see https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query
     const options = {
-      query: query,
+      query: q,
       // Location must match that of the dataset(s) referenced in the query.
       location: "US",
     };
@@ -27,8 +27,10 @@ module.exports = {
     const [rows] = await job.getQueryResults();
 
     // Print the results
-    console.log("Rows:");
-    rows.forEach((row) => console.log(row));
+    // console.log("Rows:");
+    // rows.forEach((row) => console.log(row));
+
+    return rows;
   },
   //Default data to ensure everything is working
   defaultQuery: function () {
