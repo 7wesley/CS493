@@ -42,19 +42,92 @@ module.exports = {
       dates.push(row.date.value);
       cases.push(row.confirmed_cases);
     });
+
+    //Getting array of dates in which stay at home mandate is active
+    // let mandate_dates = await module.exports.home_mandate_dates(state_code);
+    // console.log("These are the mandate dates: " + mandate_dates);
+
     const line_data = {
       labels: dates,
       datasets: [{
         label: state_code + ' Covid Cases',
         data: cases,
+        backgroundColor: (context) => { //This is not working for some reason
+          var index = context.dataIndex;
+          var value = context.dataset.data[index];
+          console.log('Testing on ' + index);
+          // if mandate_dates.includes(index){
+          //   return 'red';
+          // }
+          return 'red';
+        }
       }]
     };
 
-    //returning object needed to render the line graph
-    return {
-      data: line_data,
-      type: 'line'
+    return line_data;
+  },
+
+  home_mandate_dates: async function(state_code) {
+    //Query used to gather COVID related data
+    const state_query = "SELECT date FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
+      "WHERE region_code = 'US_NC' AND stay_at_home_requirements = '2.00' AND stay_at_home_requirements_flag = '1'\n" +
+      "ORDER BY date ASC\nLIMIT 1000;"
+
+    //Getting data by connecting with GCP for state data
+    let data = await module.exports.query(state_query);
+
+    //Configuring data into an object that can be graphed using chart.js
+    let dates = [];
+    data.forEach((row) => {
+      dates.push(row.date.value);
+    });
+
+    return dates;
+  },
+
+  vaccination_hospitalization: async function() {
+    const hospitalized_query = "SELECT date, cumulative_hospitalized_patients\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "ORDER BY date ASC\nLIMIT 1000;";
+    //Getting data by connecting with GCP for state data
+    let data = await module.exports.query(hospitalized_query);
+
+    //Configuring data into an object that can be graphed using chart.js
+    let dates = [];
+    let hospital_records = [];
+    data.forEach((row) => {
+      dates.push(row.date.value);
+      hospital_records.push(row.cumulative_hospitalized_patients);
+    });
+
+    const vaccine_query = "SELECT new_persons_fully_vaccinated\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "ORDER BY date ASC\nLIMIT 1000;";
+
+    let data2 = await module.exports.query(vaccine_query);
+
+    let vaccine_records = [];
+    data2.forEach((row) => {
+      vaccine_records.push(row.new_persons_fully_vaccinated);
+    });
+
+
+    const line_data = {
+      labels: dates,
+      datasets: [{
+        label: 'Cumulative Hospitilized Patients',
+        data: hospital_records,
+        backgroundColor: 'Red',
+      },
+      {
+        label: 'Cumulative Vaccinated Persons',
+        data: vaccine_records,
+        backgroundColor: 'Blue',
+      }]
+
     };
+
+    return line_data;
   },
 
   //Default data to ensure everything is working

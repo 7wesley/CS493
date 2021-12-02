@@ -27,9 +27,9 @@
     <script>
       const ctx = document.getElementById("myChart").getContext("2d");
       const myChart = new Chart(ctx, {
-        type: "bar",
+        type: "line",
         // Inserting data here
-        data: <%- JSON.stringify(data) %>,
+        data: <%- JSON.stringify(graph_data) %>,
         options: {
           scales: {
             y: {
