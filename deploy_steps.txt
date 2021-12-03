@@ -1,0 +1,14 @@
+Deploy to google kubernetes engine:
+1. docker build -t us-east-1-docker.pkg.dev/${PROJECT_ID}/covid-repo/covid:latest .
+2. gcloud auth configure-docker us-east-1-docker.pkg.dev
+3. docker push us-east-1-docker.pkg.dev/${PROJECT_ID}/covid-repo/covid:latest .
+4. Set zone and create cluster
+- gcloud config set compute/zone us-east1-b
+- gcloud container clusters create covid-cluster
+5. Apply the deployment file
+- kubectl apply -f deployment.yaml
+6. Scale the deployment and create a HorizontalPodAutoscaler
+- kubectl scale deployment hello-app --replicas=3
+- kubectl autoscale deployment covid --cpu-percent=80 --min=1 --max=5
+7. Create load balancer service
+- kubectl expose deployment covid --name=covid-service --type=LoadBalancer --port 80 --target-port 5000

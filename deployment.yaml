@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: covid
+spec:
+  selector:
+    matchLabels:
+      app: covid
+  template:
+    metadata:
+      labels:
+        app: covid
+    spec:
+      containers:
+        - name: covid
+          image: us-east1-docker.pkg.dev/sonic-base-332622/covid-repo/covid:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "sonic-base-332622-7c5e6669ed45.json"
