@@ -12,6 +12,9 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+//Makes css directory detectable
+app.use(express.static(path.join(__dirname, 'public')));
+
 //GET
 app.get("/", (req, res) => {
   res.render("home");

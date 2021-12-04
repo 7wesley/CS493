@@ -1,0 +1,23 @@
+body {
+  padding-top: 100px;
+  background-color: #191A19;
+}
+
+.header-color{
+  color: #D8E9A8;
+}
+
+.graph-1 {
+  padding-top: 50px;
+  color: #4E9F3D;
+}
+
+.footer-stick {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  height: 30px;
+  width: 100%;
+  color: white;
+  background: #1E5128;
+}
