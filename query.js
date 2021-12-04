@@ -72,7 +72,7 @@ module.exports = {
   home_mandate_dates: async function(state_code) {
     //Query used to gather COVID related data
     const state_query = "SELECT date FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
-      "WHERE region_code = '" + state_code + "' stay_at_home_requirements = '2.00' AND stay_at_home_requirements_flag = '1'\n" +
+      "WHERE region_code = '" + state_code + "' AND stay_at_home_requirements = '2.00' AND stay_at_home_requirements_flag = '1'\n" +
       "ORDER BY date ASC\nLIMIT 1000;"
 
     //Getting data by connecting with GCP for state data
@@ -87,9 +87,9 @@ module.exports = {
     return dates;
   },
 
-  vaccination_hospitalization: async function() {
+  vaccination_hospitalization: async function(state_code) {
     const hospitalized_query = "SELECT date, new_hospitalized_patients\n" +
-      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
     //Getting data by connecting with GCP for state data
     let data = await module.exports.query(hospitalized_query);
@@ -103,7 +103,7 @@ module.exports = {
     });
 
     const vaccine_query = "SELECT cumulative_persons_fully_vaccinated\n" +
-      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
 
     let data2 = await module.exports.query(vaccine_query);
@@ -131,9 +131,9 @@ module.exports = {
     return line_data;
   },
 
-  percentage_comparison: async function() {
+  percentage_comparison: async function(state_code) {
     const hospitalized_query = "SELECT date, cumulative_confirmed, cumulative_hospitalized_patients\n" +
-      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
     //Getting data by connecting with GCP for state data
     let data = await module.exports.query(hospitalized_query);
@@ -147,7 +147,7 @@ module.exports = {
     });
 
     const vaccine_query = "SELECT population, cumulative_persons_fully_vaccinated\n" +
-      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
 
     let data2 = await module.exports.query(vaccine_query);
