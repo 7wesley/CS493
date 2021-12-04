@@ -44,23 +44,25 @@ module.exports = {
     });
 
     //Getting array of dates in which stay at home mandate is active
-    // let mandate_dates = await module.exports.home_mandate_dates(state_code);
+    let mandate_dates = await module.exports.home_mandate_dates(state_code);
     // console.log("These are the mandate dates: " + mandate_dates);
+
+    let coloredData = [];
+    for(i = 0; i < dates.length; i++){
+      if (mandate_dates.includes(dates[i])) {
+        coloredData.push("rgba(54, 162, 235, 1)");
+      }
+      else {
+        coloredData.push("rgba(255, 99, 132, 1)")
+      }
+    }
 
     const line_data = {
       labels: dates,
       datasets: [{
         label: state_code + ' Covid Cases',
         data: cases,
-        backgroundColor: (context) => { //This is not working for some reason
-          var index = context.dataIndex;
-          var value = context.dataset.data[index];
-          console.log('Testing on ' + index);
-          // if mandate_dates.includes(index){
-          //   return 'red';
-          // }
-          return 'red';
-        }
+        backgroundColor: coloredData
       }]
     };
 
@@ -70,7 +72,7 @@ module.exports = {
   home_mandate_dates: async function(state_code) {
     //Query used to gather COVID related data
     const state_query = "SELECT date FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
-      "WHERE region_code = 'US_NC' AND stay_at_home_requirements = '2.00' AND stay_at_home_requirements_flag = '1'\n" +
+      "WHERE region_code = '" + state_code + "' stay_at_home_requirements = '2.00' AND stay_at_home_requirements_flag = '1'\n" +
       "ORDER BY date ASC\nLIMIT 1000;"
 
     //Getting data by connecting with GCP for state data
@@ -86,7 +88,7 @@ module.exports = {
   },
 
   vaccination_hospitalization: async function() {
-    const hospitalized_query = "SELECT date, cumulative_hospitalized_patients\n" +
+    const hospitalized_query = "SELECT date, new_hospitalized_patients\n" +
       "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
     //Getting data by connecting with GCP for state data
@@ -97,10 +99,10 @@ module.exports = {
     let hospital_records = [];
     data.forEach((row) => {
       dates.push(row.date.value);
-      hospital_records.push(row.cumulative_hospitalized_patients);
+      hospital_records.push(row.new_hospitalized_patients);
     });
 
-    const vaccine_query = "SELECT new_persons_fully_vaccinated\n" +
+    const vaccine_query = "SELECT cumulative_persons_fully_vaccinated\n" +
       "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
 
@@ -108,20 +110,64 @@ module.exports = {
 
     let vaccine_records = [];
     data2.forEach((row) => {
-      vaccine_records.push(row.new_persons_fully_vaccinated);
+      vaccine_records.push(row.cumulative_persons_fully_vaccinated / 10000);
+    });
+
+    const line_data = {
+      labels: dates,
+      datasets: [{
+        label: 'Hospitilized Patients',
+        data: hospital_records,
+        backgroundColor: 'Red',
+      },
+      {
+        label: 'Vaccinated Persons by 10000s',
+        data: vaccine_records,
+        backgroundColor: 'Blue',
+      }]
+
+    };
+
+    return line_data;
+  },
+
+  percentage_comparison: async function() {
+    const hospitalized_query = "SELECT date, cumulative_confirmed, cumulative_hospitalized_patients\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "ORDER BY date ASC\nLIMIT 1000;";
+    //Getting data by connecting with GCP for state data
+    let data = await module.exports.query(hospitalized_query);
+
+    //Configuring data into an object that can be graphed using chart.js
+    let dates = [];
+    let hospitalized_percentage = [];
+    data.forEach((row) => {
+      dates.push(row.date.value);
+      hospitalized_percentage.push((row.cumulative_hospitalized_patients / row.cumulative_confirmed));
+    });
+
+    const vaccine_query = "SELECT population, cumulative_persons_fully_vaccinated\n" +
+      "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = 'US'\n" +
+      "ORDER BY date ASC\nLIMIT 1000;";
+
+    let data2 = await module.exports.query(vaccine_query);
+
+    let percentage_vaccinated = [];
+    data2.forEach((row) => {
+      percentage_vaccinated.push(row.cumulative_persons_fully_vaccinated / row.population);
     });
 
 
     const line_data = {
       labels: dates,
       datasets: [{
-        label: 'Cumulative Hospitilized Patients',
-        data: hospital_records,
+        label: 'Percentage of Cases that result in Hospitalization',
+        data: hospitalized_percentage,
         backgroundColor: 'Red',
       },
       {
-        label: 'Cumulative Vaccinated Persons',
-        data: vaccine_records,
+        label: 'Percentage of Population Vaccinated',
+        data: percentage_vaccinated,
         backgroundColor: 'Blue',
       }]
 
