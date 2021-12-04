@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COVID-19 Cartogropher</title>
+  <link rel="icon" href="favicon.ico">
+
+  <!-- CSS Stylesheets -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body class="text-center">
+  <h1>COVID-19 Cartogropher</h1>
+  <form class="graph-1" action="graph_visualization" method="post">
+    <div class="form-floating">
+      <p>Select a state:</p>
+      <select name="state_select" id="state_select">
+        <option value='US_AL'>Alabama</option>
+        <option value='US_AK'>Alaska</option>
+        <option value='US_AZ'>Arizona</option>
+        <option value='US_AR'>Arkansas</option>
+        <option value='US_CA'>California</option>
+        <option value='US_CO'>Colorado</option>
+        <option value='US_CT'>Connecticut</option>
+        <option value='US_DE'>Delaware</option>
+        <option value='US_DC'>District Of Columbia</option>
+        <option value='US_FL'>Florida</option>
+        <option value='US_GA'>Georgia</option>
+        <option value='US_HI'>Hawaii</option>
+        <option value='US_ID'>Idaho</option>
+        <option value='US_IL'>Illinois</option>
+        <option value='US_IN'>Indiana</option>
+        <option value='US_IA'>Iowa</option>
+        <option value='US_KS'>Kansas</option>
+        <option value='US_KY'>Kentucky</option>
+        <option value='US_LA'>Louisiana</option>
+        <option value='US_ME'>Maine</option>
+        <option value='US_MD'>Maryland</option>
+        <option value='US_MA'>Massachusetts</option>
+        <option value='US_MI'>Michigan</option>
+        <option value='US_MN'>Minnesota</option>
+        <option value='US_MS'>Mississippi</option>
+        <option value='US_MO'>Missouri</option>
+        <option value='US_MT'>Montana</option>
+        <option value='US_NE'>Nebraska</option>
+        <option value='US_NV'>Nevada</option>
+        <option value='US_NH'>New Hampshire</option>
+        <option value='US_NJ'>New Jersey</option>
+        <option value='US_NM'>New Mexico</option>
+        <option value='US_NY'>New York</option>
+        <option value='US_NC'>North Carolina</option>
+        <option value='US_ND'>North Dakota</option>
+        <option value='US_OH'>Ohio</option>
+        <option value='US_OK'>Oklahoma</option>
+        <option value='US_OR'>Oregon</option>
+        <option value='US_PA'>Pennsylvania</option>
+        <option value='US_RI'>Rhode Island</option>
+        <option value='US_SC'>South Carolina</option>
+        <option value='US_SD'>South Dakota</option>
+        <option value='US_TN'>Tennessee</option>
+        <option value='US_TX'>Texas</option>
+        <option value='US_UT'>Utah</option>
+        <option value='US_VT'>Vermont</option>
+        <option value='US_VA'>Virginia</option>
+        <option value='US_WA'>Washington</option>
+        <option value='US_WV'>West Virginia</option>
+        <option value='US_WI'>Wisconsin</option>
+        <option value='US_WY'>Wyoming</option>
+      </select>
+      <br></br>
+    </div>
+    <div class="form-floating">
+      <p>Choose type of graph:</p>
+      <select name="graph_type" id="graph_type">
+        <option value='cases_results'>Cases by State</option>
+        <option value='cumulative_results'>Cumulative Vaccinations and New Hospitalizations by State</option>
+        <option value='percentage_results'>Percentage Vaccinated versus Percentage Hospitilized</option>
+      </select>
+    </div>
+    <button class="w-100 btn btn-lg btn-dark" type="submit">Submit</button>
+  </form>
+
+  <div class="container">
+    <footer class="py-3 ">
+      <p>©2021</p>
+    </footer>
+  </div>
+</body>
+
+</html>
