@@ -17,7 +17,7 @@
   </head>
   <body>
     <div class="container">
-      <p class="text-center mt-5 h1">Covid chart</p>
+      <p class="text-center mt-5 h1 text-success">Covid Chart</p>
       <div>
         <canvas id="myChart"></canvas>
       </div>
@@ -26,6 +26,19 @@
     <!-- Chartjs data -->
     <script>
       const ctx = document.getElementById("myChart").getContext("2d");
+
+      // Plugin for defining custom chart background
+      // const plugin = {
+      //   id: 'custom_canvas_bg',
+      //   beforeDraw: (chart) => {
+      //   ctx.save();
+      //   ctx.globalCompositeOperation = 'destination-over';
+      //   ctx.fillStyle = 'lightGreen';
+      //   ctx.fillRect(0, 0, chart.width, chart.height);
+      //   ctx.restore();
+      //   }
+      // };
+
       const myChart = new Chart(ctx, {
         type: "bar",
         // Inserting data here
@@ -37,6 +50,7 @@
             },
           },
         },
+        // plugins: [plugin],
       });
     </script>
 
