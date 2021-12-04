@@ -9,13 +9,18 @@ app.set("view engine", "ejs");
 
 //GET
 app.get("/", (req, res) => {
-  let state_graph = bigQuery.cases_by_state("US_CA");
+  let state_graph = bigQuery.cases_by_state("US_NY");
   state_graph.then((graph_data) => res.render("index", {graph_data: graph_data}));
 });
 
 app.get("/record2", (req, res) => {
   let vaccine_graph = bigQuery.vaccination_hospitalization()
   vaccine_graph.then((graph_data) => res.render("index", {graph_data: graph_data}));
+});
+
+app.get("/record3", (req, res) => {
+  let percentage_graph = bigQuery.percentage_comparison()
+  percentage_graph.then((graph_data) => res.render("index", {graph_data: graph_data}));
 });
 
 /** Listen for requests @ port */
