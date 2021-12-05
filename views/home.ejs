@@ -16,9 +16,9 @@
   function togglePolicy() {
     let graph_type = document.getElementById("graph_type").value;
     if (graph_type == 'cases_results') {
-      document.getElementById("policy").style.display = 'block';
+      document.getElementById("policy_div").style.display = '';
     } else {
-      document.getElementById("policy").style.display = 'none';
+      document.getElementById("policy_div").style.display = 'none';
     }
   }
   </script>
@@ -93,7 +93,7 @@
         <option value='percentage_results'>Percentage Vaccinated versus Percentage Hospitilized</option>
       </select>
     </div>
-    <div class="form-floating">
+    <div class="form-floating" id="policy_div">
       <p>Choose a policy to track:</p>
       <select name="policy" id="policy">
         <option value="restrictions_on_gatherings = '4.00' AND restrictions_on_gatherings_flag = '1'">10 Person Gathering</option><option value="international_travel_controls = '4.00' AND school_closing_flag = '1'">Ban International Travel From High-Risk Regions</option>
