@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 app.post("/graph_visualization", (req, res) => {
   let state_code = req.body.state_select;
   let graph_choice = req.body.graph_type;
+  let policy_req = req.body.policy;
   if (graph_choice === 'percentage_results') {
     let percentage_graph = bigQuery.percentage_comparison(state_code)
     percentage_graph.then((graph_data) => res.render("index", {graph_data: graph_data}));
@@ -32,7 +33,7 @@ app.post("/graph_visualization", (req, res) => {
     vaccine_graph.then((graph_data) => res.render("index", {graph_data: graph_data}));
   }
   else {
-    let state_graph = bigQuery.cases_by_state(state_code);
+    let state_graph = bigQuery.cases_by_state(state_code, policy_req);
     state_graph.then((graph_data) => res.render("index", {graph_data: graph_data}));
   }
 })

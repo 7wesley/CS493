@@ -25,7 +25,7 @@ module.exports = {
     return rows;
   },
 
-  cases_by_state: async function(state_code) {
+  cases_by_state: async function(state_code, policy_req) {
     //Query used to gather COVID related data
     const state_query = "SELECT date, confirmed_cases FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
       "WHERE region_code = '" + state_code + "' AND confirmed_cases IS NOT NULL\n" +
@@ -44,7 +44,7 @@ module.exports = {
     });
 
     //Getting array of dates in which stay at home mandate is active
-    let mandate_dates = await module.exports.home_mandate_dates(state_code);
+    let mandate_dates = await module.exports.home_mandate_dates(state_code, policy_req);
     // console.log("These are the mandate dates: " + mandate_dates);
 
     let coloredData = [];
@@ -69,10 +69,10 @@ module.exports = {
     return line_data;
   },
 
-  home_mandate_dates: async function(state_code) {
+  home_mandate_dates: async function(state_code, policy_req) {
     //Query used to gather COVID related data
     const state_query = "SELECT date FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
-      "WHERE region_code = '" + state_code + "' AND stay_at_home_requirements = '2.00' AND stay_at_home_requirements_flag = '1'\n" +
+      "WHERE region_code = '" + state_code + "' AND " + policy_req + "\n" +
       "ORDER BY date ASC\nLIMIT 1000;"
 
     //Getting data by connecting with GCP for state data
