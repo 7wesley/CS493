@@ -1,3 +1,10 @@
+/**
+* This file uses Express to run the server side backend of our project.
+* @authors: William Tanaka, Miles Stanley, Noah Lowry, and Wesley Miller
+* @version: 12/5/21
+*/
+
+//required variables
 const express = require("express");
 const path = require("path");
 const bigQuery = require("./query");
@@ -20,6 +27,7 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+//POST request after submission
 app.post("/graph_visualization", (req, res) => {
   let state_code = req.body.state_select;
   let graph_choice = req.body.graph_type;

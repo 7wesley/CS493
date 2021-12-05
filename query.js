@@ -1,11 +1,22 @@
-// Import the Google Cloud client library using default credentials
+/**
+* This file holds the asynchronous query functions called by our front end.
+* @authors: William Tanaka and Miles Stanley
+* @version: 12/5/21
+*/
+
+// BigQueryAPI
 const {
   BigQuery
 } = require("@google-cloud/bigquery");
 const bigquery = new BigQuery();
 
 module.exports = {
-  //BigQuery data
+  /**
+  * This function runs queries by contatcting BigQuery through the GCP client
+  * library.
+  * @param String q: a query to be rung through bigQuery
+  * @return *[] rows: an array of the returnedd values of the query
+  */
   query: async function(q) {
 
     // For all options, see https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query
@@ -25,6 +36,12 @@ module.exports = {
     return rows;
   },
 
+  /**
+  * This function runs a query that displays COVID cases by state and highlights dates that a policy is active.
+  * @param String state_code: a code that represents which state's data will be queried for.
+  * @param String policy_req: a string that represents which ploicy to query on.
+  * @return Object[] line_data: an object used by ChartJS to visualize our data.
+  */
   cases_by_state: async function(state_code, policy_req) {
     //Query used to gather COVID related data
     const state_query = "SELECT date, confirmed_cases FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
@@ -43,7 +60,6 @@ module.exports = {
       cases.push(row.confirmed_cases);
     });
 
-    //Getting array of dates in which stay at home mandate is active
     let mandate_dates = await module.exports.home_mandate_dates(state_code, policy_req);
     // console.log("These are the mandate dates: " + mandate_dates);
 
@@ -69,6 +85,12 @@ module.exports = {
     return line_data;
   },
 
+  /**
+  * This function gets an array of dates in which stay at home mandate is active
+  * @param String state_code: a code that represents which state's data will be queried for.
+  * @param String policy_req: a string that represents which ploicy to query on.
+  * @return String[] dates: an array of dates when the policy was active in the state.
+  */
   home_mandate_dates: async function(state_code, policy_req) {
     //Query used to gather COVID related data
     const state_query = "SELECT date FROM bigquery-public-data.covid19_govt_response.oxford_policy_tracker\n" +
@@ -87,6 +109,11 @@ module.exports = {
     return dates;
   },
 
+  /**
+  * This function runs a query that displays cumulative persons vaccinated and new hospitalized patients by state
+  * @param String state_code: a code that represents which state's data will be queried for.
+  * @return Object[] line_data: an object used by ChartJS to visualize our data.
+  */
   vaccination_hospitalization: async function(state_code) {
     const hospitalized_query = "SELECT date, new_hospitalized_patients\n" +
       "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
@@ -113,6 +140,7 @@ module.exports = {
       vaccine_records.push(row.cumulative_persons_fully_vaccinated / 10000);
     });
 
+    //setting up ChartJS object
     const line_data = {
       labels: dates,
       datasets: [{
@@ -131,6 +159,12 @@ module.exports = {
     return line_data;
   },
 
+  /**
+  * This function runs a query that displays cumulative hospitalized patients and
+  * cumulative persons vaccinate by the 10,000's by state.
+  * @param String state_code: a code that represents which state's data will be queried for.
+  * @return Object[] line_data: an object used by ChartJS to visualize our data.
+  */
   percentage_comparison: async function(state_code) {
     const hospitalized_query = "SELECT date, cumulative_confirmed, cumulative_hospitalized_patients\n" +
       "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
@@ -146,6 +180,7 @@ module.exports = {
       hospitalized_percentage.push((row.cumulative_hospitalized_patients / row.cumulative_confirmed));
     });
 
+    //second query
     const vaccine_query = "SELECT population, cumulative_persons_fully_vaccinated\n" +
       "FROM bigquery-public-data.covid19_open_data.covid19_open_data\nWHERE location_key = '" + state_code + "'\n" +
       "ORDER BY date ASC\nLIMIT 1000;";
@@ -157,7 +192,7 @@ module.exports = {
       percentage_vaccinated.push(row.cumulative_persons_fully_vaccinated / row.population);
     });
 
-
+    //setting up ChartJS object
     const line_data = {
       labels: dates,
       datasets: [{
