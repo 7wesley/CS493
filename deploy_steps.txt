@@ -1,7 +1,7 @@
 Deploy to google kubernetes engine:
-1. docker build -t us-east-1-docker.pkg.dev/${PROJECT_ID}/covid-repo/covid:latest .
-2. gcloud auth configure-docker us-east-1-docker.pkg.dev
-3. docker push us-east-1-docker.pkg.dev/${PROJECT_ID}/covid-repo/covid:latest .
+1. docker build -t us-east1-docker.pkg.dev/${PROJECT_ID}/covid-repo/covid:latest .
+2. gcloud auth configure-docker us-east1-docker.pkg.dev
+3. docker push us-east-1-docker.pkg.dev/${PROJECT_ID}/covid-repo/covid:latest
 4. Set zone and create cluster
 - gcloud config set compute/zone us-east1-b
 - gcloud container clusters create covid-cluster
