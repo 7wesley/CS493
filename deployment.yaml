@@ -20,4 +20,4 @@ spec:
             - name: PORT
               value: "5000"
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "sonic-base-332622-7c5e6669ed45.json"
+              value: "service_account.json"
